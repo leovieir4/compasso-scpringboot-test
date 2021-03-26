@@ -44,8 +44,8 @@ public class ProductControllerTest {
 	BindingResult result;
 
 	@Test
-	public void testCreateProductShouldReturnStatusCode201AndValidProduct() throws JsonProcessingException, Exception {
-		
+	public void testCreateProductShouldReturnStatusCode201() throws JsonProcessingException, Exception {
+
 		Product actualProduct = new Product();
 		actualProduct.setDescription("Description");
 		actualProduct.setName("name");
@@ -62,138 +62,186 @@ public class ProductControllerTest {
 
 		String url = "/products";
 
-		MvcResult mvcResult = mvc.perform(
-				 post(url)
-				 .contentType("application/json")
-				 .content(obm.writeValueAsString(actualProduct)))
-				.andExpect(status().isCreated()).andReturn(); 
-		
-		String actualResponse = mvcResult.getResponse().getContentAsString();
-		String expectedResponse = obm.writeValueAsString(productExpected);
-		
-		assertThat(actualResponse).isEqualToIgnoringWhitespace(expectedResponse);
-
+		mvc.perform(post(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
+				.andExpect(status().isCreated());
 	}
-	
+
 	@Test
 	public void tesGettListProductsShouldReturnStatusCode200AndProductList() throws Exception {
-		
+
 		List<Product> products = new ArrayList<Product>();
-		
+
 		Product p1 = new Product();
 		p1.setDescription("Description");
 		p1.setId("1");
 		p1.setName("name");
 		p1.setDescription("Description");
-		
-		
+
 		Product p2 = new Product();
 		p2.setDescription("Description");
 		p2.setId("2");
 		p2.setName("name");
 		p2.setDescription("Description");
-		
+
 		products.add(p1);
 		products.add(p2);
-		
+
 		Mockito.when(repository.findAll()).thenReturn(products);
-		
+
 		String url = "/products";
-		
+
 		MvcResult mvcResult = mvc.perform(get(url)).andExpect(status().isOk()).andReturn();
-		
+
 		String actualResponse = mvcResult.getResponse().getContentAsString();
 		String expectedResponse = obm.writeValueAsString(products);
-		
+
 		assertThat(actualResponse).isEqualToIgnoringWhitespace(expectedResponse);
-		
+
 	}
-	
+
 	@Test
 	public void testUpdateProducShouldReturnStatusCode200AndUpdatedProduct() throws JsonProcessingException, Exception {
-		
+
 		Product atual = new Product();
 		atual.setDescription("Description");
 		atual.setId("1");
 		atual.setName("name");
 		atual.setDescription("Description");
-		
+
 		Product expectedProduct = new Product();
 		expectedProduct.setDescription("Description new");
 		expectedProduct.setId("1");
 		expectedProduct.setName("name new");
-		
-		Optional<Product> opt =  Optional.of(atual);
-		
+
+		Optional<Product> opt = Optional.of(atual);
+
 		Mockito.when(repository.save(atual)).thenReturn(expectedProduct);
 		Mockito.when(repository.findById(atual.getId())).thenReturn(opt);
 
 		String url = "/products/1";
-		
-		MvcResult mvcResult = mvc.perform(
-				 put(url)
-				 .contentType("application/json")
-				 .content(obm.writeValueAsString(atual)))
-				.andExpect(status().isOk())
-				.andReturn(); 
-		
+
+		MvcResult mvcResult = mvc
+				.perform(put(url).contentType("application/json").content(obm.writeValueAsString(atual)))
+				.andExpect(status().isOk()).andReturn();
+
 		String actualResponse = mvcResult.getResponse().getContentAsString();
 		String expectedResponse = obm.writeValueAsString(expectedProduct);
-		
+
 		assertThat(actualResponse).isEqualToIgnoringWhitespace(expectedResponse);
 	}
-	
+
 	@Test
 	public void testDeleteProductShouldReturnStatusCode200() throws Exception {
-		
+
 		Product atual = new Product();
 		atual.setDescription("Description");
 		atual.setId("1");
 		atual.setName("name");
 		atual.setDescription("Description");
-		
-		Optional<Product> opt =  Optional.of(atual);
-		
+
+		Optional<Product> opt = Optional.of(atual);
+
 		Mockito.when(repository.findById(atual.getId())).thenReturn(opt);
-		
+
 		String url = "/products/1";
-		
+
 		MvcResult mvcResult = mvc.perform(delete(url)).andExpect(status().isOk()).andReturn();
 	}
-	
+
 	@Test
 	public void testGetProductByQueryParamsShouldReturnFilteredListAndStatusCode200() throws Exception {
-		
+
 		List<Product> actualProducts = new ArrayList<Product>();
 		List<Product> expectedProducts = new ArrayList<Product>();
-		
+
 		Product p1 = new Product();
 		p1.setDescription("Description test");
 		p1.setId("1");
 		p1.setName("name");
 		p1.setPrice(new BigDecimal(10));
-		
-		
+
 		Product p2 = new Product();
 		p2.setDescription("Description");
 		p2.setId("2");
 		p2.setName("name");
 		p2.setPrice(new BigDecimal(10));
-		
+
 		actualProducts.add(p1);
 		actualProducts.add(p2);
-		
+
 		expectedProducts.add(p1);
-		
+
 		Mockito.when(repository.findAll()).thenReturn(actualProducts);
-		
+
 		String url = "/products/search?min_price=10&max_price=40&q=test";
-		
+
 		MvcResult mvcResult = mvc.perform(get(url)).andExpect(status().isOk()).andReturn();
-		
+
 		String actualResponse = mvcResult.getResponse().getContentAsString();
 		String expectedResponse = obm.writeValueAsString(expectedProducts);
-		
+
 		assertThat(actualResponse).isEqualToIgnoringWhitespace(expectedResponse);
 	}
+	
+	@Test
+	public void testCreateUserWithParamNameEmptyStatusCode400() throws JsonProcessingException, Exception {
+		Product actualProduct = new Product();
+		actualProduct.setDescription("Description");
+		actualProduct.setPrice(new BigDecimal(10));
+
+		Product productExpected = new Product();
+		productExpected.setDescription("Description");
+		productExpected.setName("name");
+		productExpected.setPrice(new BigDecimal(10));
+		productExpected.setId("1");
+
+		Mockito.when(repository.save(actualProduct)).thenReturn(productExpected);
+
+		String url = "/products";
+
+		mvc.perform(post(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
+				.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void testCreateUserWithParamDescriptionEmptyStatusCode400() throws JsonProcessingException, Exception {
+		Product actualProduct = new Product();
+		actualProduct.setPrice(new BigDecimal(10));
+		actualProduct.setName("Name");
+		
+		Product productExpected = new Product();
+		productExpected.setDescription("Description");
+		productExpected.setName("name");
+		productExpected.setPrice(new BigDecimal(10));
+		productExpected.setId("1");
+
+		Mockito.when(repository.save(actualProduct)).thenReturn(productExpected);
+
+		String url = "/products";
+
+		mvc.perform(post(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
+				.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	public void testCreateUserWithParamPriceIsLessThenZeroShouldReturnStatusCode400() throws JsonProcessingException, Exception {
+		Product actualProduct = new Product();
+		actualProduct.setPrice(new BigDecimal(-10));
+		actualProduct.setName("Name");
+		actualProduct.setDescription("Description");
+		
+		Product productExpected = new Product();
+		productExpected.setDescription("Description");
+		productExpected.setName("name");
+		productExpected.setPrice(new BigDecimal(10));
+		productExpected.setId("1");
+
+		Mockito.when(repository.save(actualProduct)).thenReturn(productExpected);
+
+		String url = "/products";
+
+		mvc.perform(post(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
+				.andExpect(status().isBadRequest());
+	}
+	
 }

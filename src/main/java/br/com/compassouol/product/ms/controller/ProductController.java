@@ -63,8 +63,8 @@ public class ProductController {
 	public ResponseEntity<?> create(@RequestBody @Valid Product product, BindingResult result) {
 		
 		if (result.hasErrors()) return this.generateErrorMessaget(result, HttpStatus.BAD_REQUEST.value());
-		
-		return  ResponseEntity.status(HttpStatus.CREATED.value()).body(productRepository.save(product));
+		Product created = productRepository.save(product);
+		return  ResponseEntity.status(HttpStatus.CREATED.value()).body(created);
 	}
 
 	@PutMapping(value = "/{id}")
