@@ -53,6 +53,7 @@ Para saber mais basta acessas a documentação java (javadoc) no diretório /doc
 ```sh
 mvn clean install //executa os testes
 ```
+Após a execução desse proccesso a API estara rodando no endereço: http://localhost:9999/products/
 
 ### Hospedagem heroku:
 
