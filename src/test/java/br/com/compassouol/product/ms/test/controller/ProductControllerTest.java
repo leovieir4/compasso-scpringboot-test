@@ -27,7 +27,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.compassouol.product.ms.controller.ProductController;
 import br.com.compassouol.product.ms.model.Product;
 import br.com.compassouol.product.ms.repository.ProductRepository;
-
+/**
+ * Class Test Product Controller, testing all methods from Product controller
+ * @author Leonardo Vieira
+ *
+ */
 @WebMvcTest(ProductController.class)
 public class ProductControllerTest {
 
@@ -42,6 +46,12 @@ public class ProductControllerTest {
 
 	@MockBean
 	BindingResult result;
+	
+	/**
+	 * Testing product creation method, this test should return http status code 201 to show that product was created.
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 */
 
 	@Test
 	public void testCreateProductShouldReturnStatusCode201() throws JsonProcessingException, Exception {
@@ -65,7 +75,10 @@ public class ProductControllerTest {
 		mvc.perform(post(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
 				.andExpect(status().isCreated());
 	}
-
+	/**
+	 * Testing search list method, this test should return http status code 200 and return a list with all products. 
+	 * @throws Exception
+	 */
 	@Test
 	public void tesGettListProductsShouldReturnStatusCode200AndProductList() throws Exception {
 
@@ -98,9 +111,13 @@ public class ProductControllerTest {
 		assertThat(actualResponse).isEqualToIgnoringWhitespace(expectedResponse);
 
 	}
-
+	/**
+	 * Testing update product method, this test should return http status code 200 and a updated product.
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 */
 	@Test
-	public void testUpdateProducShouldReturnStatusCode200AndUpdatedProduct() throws JsonProcessingException, Exception {
+	public void testUpdateProductShouldReturnStatusCode200AndUpdatedProduct() throws JsonProcessingException, Exception {
 
 		Product atual = new Product();
 		atual.setDescription("Description");
@@ -129,7 +146,10 @@ public class ProductControllerTest {
 
 		assertThat(actualResponse).isEqualToIgnoringWhitespace(expectedResponse);
 	}
-
+	/**
+	 * Testing delete product method, this method shloud return status code 200
+	 * @throws Exception
+	 */
 	@Test
 	public void testDeleteProductShouldReturnStatusCode200() throws Exception {
 
@@ -147,7 +167,11 @@ public class ProductControllerTest {
 
 		MvcResult mvcResult = mvc.perform(delete(url)).andExpect(status().isOk()).andReturn();
 	}
-
+	
+	/**
+	 * Testing search by params method, this test should return htt status code 200 and check if a correct filtered list was returned
+	 * @throws Exception
+	 */
 	@Test
 	public void testGetProductByQueryParamsShouldReturnFilteredListAndStatusCode200() throws Exception {
 
@@ -182,7 +206,11 @@ public class ProductControllerTest {
 
 		assertThat(actualResponse).isEqualToIgnoringWhitespace(expectedResponse);
 	}
-	
+	/**
+	 * Testing received params of create product method, this method should return http status code 400 if name param is empty
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 */
 	@Test
 	public void testCreateUserWithParamNameEmptyStatusCode400() throws JsonProcessingException, Exception {
 		Product actualProduct = new Product();
@@ -202,7 +230,11 @@ public class ProductControllerTest {
 		mvc.perform(post(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
 				.andExpect(status().isBadRequest());
 	}
-	
+	/**
+	 * Testing received params of create product method, this method should return http Description code 400 if name param is empty
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 */
 	@Test
 	public void testCreateUserWithParamDescriptionEmptyStatusCode400() throws JsonProcessingException, Exception {
 		Product actualProduct = new Product();
@@ -222,7 +254,11 @@ public class ProductControllerTest {
 		mvc.perform(post(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
 				.andExpect(status().isBadRequest());
 	}
-	
+	/**
+	 * Testing received params of create product method, this method should return http status code 400 if name price param is less then zero
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 */
 	@Test
 	public void testCreateUserWithParamPriceIsLessThenZeroShouldReturnStatusCode400() throws JsonProcessingException, Exception {
 		Product actualProduct = new Product();
@@ -241,6 +277,79 @@ public class ProductControllerTest {
 		String url = "/products";
 
 		mvc.perform(post(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
+				.andExpect(status().isBadRequest());
+	}
+	/**
+	 * Testing received params of update product method, this method should return http status code 400 if name param is empty
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 */
+	@Test
+	public void testUpdateUserWithParamNameEmptyStatusCode400() throws JsonProcessingException, Exception {
+		Product actualProduct = new Product();
+		actualProduct.setDescription("Description");
+		actualProduct.setPrice(new BigDecimal(10));
+
+		Product productExpected = new Product();
+		productExpected.setDescription("Description");
+		productExpected.setName("name");
+		productExpected.setPrice(new BigDecimal(10));
+		productExpected.setId("1");
+
+		Mockito.when(repository.save(actualProduct)).thenReturn(productExpected);
+
+		String url = "/products/1";
+
+		mvc.perform(put(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
+				.andExpect(status().isBadRequest());
+	}
+	/**
+	 * Testing received params of update product method, this method should return http Description code 400 if name param is empty
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 */
+	@Test
+	public void testUpdateUserWithParamDescriptionEmptyStatusCode400() throws JsonProcessingException, Exception {
+		Product actualProduct = new Product();
+		actualProduct.setPrice(new BigDecimal(10));
+		actualProduct.setName("Name");
+		
+		Product productExpected = new Product();
+		productExpected.setDescription("Description");
+		productExpected.setName("name");
+		productExpected.setPrice(new BigDecimal(10));
+		productExpected.setId("1");
+
+		Mockito.when(repository.save(actualProduct)).thenReturn(productExpected);
+
+		String url = "/products/1";
+
+		mvc.perform(put(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
+				.andExpect(status().isBadRequest());
+	}
+	/**
+	 * Testing received params of update product method, this method should return http status code 400 if name price param is less then zero
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 */
+	@Test
+	public void testUpdateUserWithParamPriceIsLessThenZeroShouldReturnStatusCode400() throws JsonProcessingException, Exception {
+		Product actualProduct = new Product();
+		actualProduct.setPrice(new BigDecimal(-10));
+		actualProduct.setName("Name");
+		actualProduct.setDescription("Description");
+		
+		Product productExpected = new Product();
+		productExpected.setDescription("Description");
+		productExpected.setName("name");
+		productExpected.setPrice(new BigDecimal(10));
+		productExpected.setId("1");
+
+		Mockito.when(repository.save(actualProduct)).thenReturn(productExpected);
+
+		String url = "/products/1";
+
+		mvc.perform(put(url).contentType("application/json").content(obm.writeValueAsString(actualProduct)))
 				.andExpect(status().isBadRequest());
 	}
 	
