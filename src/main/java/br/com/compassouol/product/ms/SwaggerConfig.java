@@ -24,8 +24,8 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 	}
 
 	private ApiInfo metaData() {
-		return new ApiInfoBuilder().title("Spring Boot REST API")
-				.description("\"Spring Boot REST API for greeting people\"").version("1.0.0")
+		return new ApiInfoBuilder().title("Spring Boot REST API - Compasso UOL")
+				.description("\"Spring Boot REST API for compassouol challenge\"").version("1.0.0")
 				.license("Apache License Version 2.0").licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
 				.build();
 	}
