@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,7 @@ public class ProductControllerTest {
 	 */
 
 	@Test
+	@DisplayName("Test to create a product and return status code 201")
 	public void testCreateProductShouldReturnStatusCode201() throws JsonProcessingException, Exception {
 
 		Product actualProduct = new Product();
@@ -80,7 +82,8 @@ public class ProductControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void tesGettListProductsShouldReturnStatusCode200AndProductList() throws Exception {
+	@DisplayName("Test to get product List and return http status code 200")
+	public void tesGetListProductsShouldReturnStatusCode200AndProductList() throws Exception {
 
 		List<Product> products = new ArrayList<Product>();
 
@@ -117,6 +120,7 @@ public class ProductControllerTest {
 	 * @throws Exception
 	 */
 	@Test
+	@DisplayName("Test to update a product by id and return http status code 200")
 	public void testUpdateProductShouldReturnStatusCode200AndUpdatedProduct() throws JsonProcessingException, Exception {
 
 		Product atual = new Product();
@@ -151,6 +155,7 @@ public class ProductControllerTest {
 	 * @throws Exception
 	 */
 	@Test
+	@DisplayName("Test delete a product by id and return http status code 200")
 	public void testDeleteProductShouldReturnStatusCode200() throws Exception {
 
 		Product atual = new Product();
@@ -173,6 +178,7 @@ public class ProductControllerTest {
 	 * @throws Exception
 	 */
 	@Test
+	@DisplayName("Test get product list filtered by params and return http status code 200")
 	public void testGetProductByQueryParamsShouldReturnFilteredListAndStatusCode200() throws Exception {
 
 		List<Product> actualProducts = new ArrayList<Product>();
@@ -212,7 +218,8 @@ public class ProductControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testCreateUserWithParamNameEmptyStatusCode400() throws JsonProcessingException, Exception {
+	@DisplayName("Test to valid if param name is empty on create, should return http status code 400")
+	public void testCreateProductWithParamNameEmptyShouldReturnStatusCode400() throws JsonProcessingException, Exception {
 		Product actualProduct = new Product();
 		actualProduct.setDescription("Description");
 		actualProduct.setPrice(new BigDecimal(10));
@@ -236,7 +243,8 @@ public class ProductControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testCreateUserWithParamDescriptionEmptyStatusCode400() throws JsonProcessingException, Exception {
+	@DisplayName("Test to valid if param description is empty on create, should return http status code 400")
+	public void testCreateProductWithParamDescriptionEmptyShouldReturnStatusCode400() throws JsonProcessingException, Exception {
 		Product actualProduct = new Product();
 		actualProduct.setPrice(new BigDecimal(10));
 		actualProduct.setName("Name");
@@ -260,6 +268,7 @@ public class ProductControllerTest {
 	 * @throws Exception
 	 */
 	@Test
+	@DisplayName("Test to valid if param price is less then zero on create, should return http status code 400")
 	public void testCreateUserWithParamPriceIsLessThenZeroShouldReturnStatusCode400() throws JsonProcessingException, Exception {
 		Product actualProduct = new Product();
 		actualProduct.setPrice(new BigDecimal(-10));
@@ -285,7 +294,8 @@ public class ProductControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testUpdateUserWithParamNameEmptyStatusCode400() throws JsonProcessingException, Exception {
+	@DisplayName("Test to valid if param name is empty on update, should return http status code 400")
+	public void testUpdateUserWithParamNameEmptyShouldReturnStatusCode400() throws JsonProcessingException, Exception {
 		Product actualProduct = new Product();
 		actualProduct.setDescription("Description");
 		actualProduct.setPrice(new BigDecimal(10));
@@ -309,7 +319,8 @@ public class ProductControllerTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void testUpdateUserWithParamDescriptionEmptyStatusCode400() throws JsonProcessingException, Exception {
+	@DisplayName("Test to valid if param description is empty on update product, should return http status code 400")
+	public void testUpdateUserWithParamDescriptionEmptyShouldReturnStatusCode400() throws JsonProcessingException, Exception {
 		Product actualProduct = new Product();
 		actualProduct.setPrice(new BigDecimal(10));
 		actualProduct.setName("Name");
@@ -333,6 +344,7 @@ public class ProductControllerTest {
 	 * @throws Exception
 	 */
 	@Test
+	@DisplayName("Test to valid if param price is less then zero on update product, should return http status code 400")
 	public void testUpdateUserWithParamPriceIsLessThenZeroShouldReturnStatusCode400() throws JsonProcessingException, Exception {
 		Product actualProduct = new Product();
 		actualProduct.setPrice(new BigDecimal(-10));
