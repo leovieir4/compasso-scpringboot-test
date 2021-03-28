@@ -128,11 +128,13 @@ public class ProductControllerTest {
 		atual.setId("1");
 		atual.setName("name");
 		atual.setDescription("Description");
+		atual.setPrice(new BigDecimal(10));
 
 		Product expectedProduct = new Product();
 		expectedProduct.setDescription("Description new");
 		expectedProduct.setId("1");
 		expectedProduct.setName("name new");
+		expectedProduct.setPrice(new BigDecimal(20));
 
 		Optional<Product> opt = Optional.of(atual);
 
