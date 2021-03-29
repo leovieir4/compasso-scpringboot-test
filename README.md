@@ -44,6 +44,7 @@ Com essas dependências instaladas e as configurações realizadas, basta clonar
 $ mvn clean install //limpa o diretório target com o comando clean e realiza o download das dependências com install, além disso realiza todos os testes unitarios.
 $ mvn clean package spring-boot:run //executa a aplicação
 ```
+Após a execução desse proccesso a API estara rodando no endereço: http://localhost:9999/products/
 
 ### Tests:
 A aplicação possui 12 testes unitários para validar o retorno dos endpoints (status e objetos) e seus parâmetros de entrada.
@@ -53,7 +54,6 @@ Para saber mais basta acessas a documentação java (javadoc) no diretório /doc
 ```sh
 mvn clean install //executa os testes
 ```
-Após a execução desse proccesso a API estara rodando no endereço: http://localhost:9999/products/
 
 ### Hospedagem heroku:
 
